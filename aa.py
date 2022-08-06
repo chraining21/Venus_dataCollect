@@ -5,9 +5,10 @@ import GetFile as g
 db = pymysql.connect(host='localhost', port=3306, user='root', passwd='123456', db='sys')
 #建立操作游標
 cursor = db.cursor()
+#打開excel檔並以wb儲存
 wb = openpyxl.load_workbook('goodFinal.xlsx')
 sheet = wb.worksheets[0]
-
+#commit至資料庫的方法
 def commit():
     try:
       #提交修改
@@ -17,13 +18,13 @@ def commit():
       #發生錯誤時停止執行SQL
       db.rollback()
       print('error')
-
-for i in range(1, 3):
+#開始跑資料庫
+for i in range(1, sheet.max_row+1):
     print("row="+str(i))
     for j in range(1, sheet.max_column+1):
-        ing = str(sheet.cell(row=i, column=j).value)
+        ing = str(sheet.cell(row=i, column=j).value) #ing是每一格的值
         id = 0
-        ingre_name, what_it_does, irritancy, comedogenicity, rank, alias = g.incide2(ing)
+        ingre_name, what_it_does, irritancy, comedogenicity, rank, alias = g.incide2(ing) #取得各元素
         if (rank != 'nothing'):
             sql = "SELECT id FROM ingres_alia where name =(%s)"
             val = ingre_name
