@@ -32,12 +32,16 @@ def incide2(ingre_name):
             try:
                 what_it_do=soup_list[i].select("a")
                 for j in range(len(what_it_do)):
-                    what_it_does.append(what_it_do[j].getText().strip())
+                    what_it_does.append(what_it_do[j].getText().replace('\u200b', "").strip())
             except:
                 print(Exception.__name__)
             try:
                 if(soup_list[i].select_one("span.label.klavikab.grey1").text == 'Also-called-like-this:'):
-                    alias= soup_list[i].select_one("span.value").text.strip()
+                    str= soup_list[i].select_one("span.value").text.strip()
+                    alias = str.split(", ")
+                    for a in alias:
+                        a = a.replace('\u200b', "")
+                        a = a.strip()
                 if (soup_list[i].select_one("span.label.klavikab.grey1").text == 'Irritancy: '):
                     irritancy = soup_list[i].select_one("span.value").text.strip()
                 if (soup_list[i].select_one("span.label.klavikab.grey1").text == 'Comedogenicity: '):
@@ -62,4 +66,4 @@ def do_alpha(ing):
 再用用for迴圈，一直跑incide跟climbincide去爬資料，將查到的資料放進資料表，
 但是要設if-else去過濾找不到的要存進資料庫的值為何。
 """
-#print(incide2('Sodium Acrylates Crosspolymer-2'))
+print(incide2(qu))
